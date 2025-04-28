@@ -60,16 +60,11 @@ The reward is the sum of two components:
 1. **Format Reward**: The model earns a reward of `0.1` when it correctly follows the specified format with thinking and answer tags, and `0` otherwise.
 2. **Answer Reward**: The model receives a reward of `1` if its final answer uses each provided number exactly once and correctly evaluates to the target value, otherwise it receives `0`.
 
+## Download model and dataset
 
-## Training
-
-We use the `Qwen2.5-3B-Instruct` model for training. To train the model, run the following commands:
+Download the pretrained model and dataset:
 
 ```bash
-# initialize the environment
-pip install uv
-uv sync
-
 # install git-lfs
 apt update; apt install git-lfs -y; git lfs install
 
@@ -78,11 +73,48 @@ git clone https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4
 
 # download the pretrained model
 git clone https://huggingface.co/Qwen/Qwen2.5-3B-Instruct
-# train the model
-uv run train.py
-# train the model with a 24GB VRAM GPU (e.g., an RTX 4090 GPU)
-uv run train.py --config config_24GB.yaml
 ```
+
+Or you can use `transformers` and `datasets` to download the model and dataset:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from datasets import Dataset, load_dataset
+model = AutoModelForCausalLM.from_pretrained('Qwen/Qwen2.5-3B-Instruct')
+tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-3B-Instruct')
+dataset = load_dataset('Jiayi-Pan/Countdown-Tasks-3to4', split='train')
+```
+
+Then you should change the path of model and data in `config.yaml`:
+
+```diff
+ model:
+-  pretrained_model_path: "Qwen2.5-3B-Instruct"
++  pretrained_model_path: "/data1/linkdom/.cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1"
+   device: "cuda"
+   dtype: "bfloat16"
+ data:
+-  path: "Countdown-Tasks-3to4"
++  path: "/data1/linkdom/.cache/huggingface/hub/datasets--Jiayi-Pan--Countdown-Tasks-3to4/snapshots/408f70d177020686d34a56bba5952feb45aaaee4"
+   test_size: 128
+```
+
+## Training
+
+We use the `Qwen2.5-3B-Instruct` model for training. To train the model, run the following commands:
+
+```bash
+# create a conda environment
+conda create -n grpo python=3.9
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install -r requirements.txt
+
+# train the model
+python train.py
+# train the model with a 24GB VRAM GPU (e.g., an RTX 4090 GPU)
+python train.py --config config_24GB.yaml
+```
+
 ## Acknowledgements
 
 This project builds upon the work of several outstanding projects:
