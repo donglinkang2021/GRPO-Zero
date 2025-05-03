@@ -70,7 +70,11 @@ def main(config_path: str):
     NUM_ANSWERS_PER_QUESTION = BATCH_SIZE // NUM_QUESTIONS_PER_BATCH
 
     current_time = datetime.now().strftime(r"%Y%m%d-%H%M%S")
-    tb_writer = SummaryWriter(log_dir=f"{config['training']['log_dir']}/{current_time}")
+    log_dir=f"{config['training']['log_dir']}/{current_time}"
+    tb_writer = SummaryWriter(log_dir=log_dir)
+    # save config to log_dir
+    with open(f"{log_dir}/config.yaml", "w") as f:
+        yaml.dump(config, f)
     tokenizer = Tokenizer(str(pretrained_model_path / "tokenizer.json"))
 
     train_dataset = CountdownTasksDataset(
