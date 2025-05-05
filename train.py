@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard.writer import SummaryWriter
 
 from countdown_task import CountdownTasksDataset, reward_function
-from grpo.srgrpo import rollout, update_policy
+from grpo.slrgrpo import rollout, update_policy
 from optimizer import MemoryEfficientAdamW
 from qwen2_model import Transformer
 from tokenizer import Tokenizer

@@ -57,9 +57,11 @@ Test different models and their performance.
 | 20250504-170927 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + add-entropy_obj |
 | 20250504-171029 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + remove-std_reward |
 | 20250504-171117 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + dynamic_gen_length |
-| 20250505-101953 | Qwen2.5-Math-1.5B-Instruct | [interupt]grpo + overlong-filter + remove-std_reward + add-entropy_obj |
+| 20250505-101953 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + remove-std_reward + add-entropy_obj [interupted] |
 | 20250505-103413 | Qwen2.5-1.5B-Instruct | grpo + overlong-filter + remove-std_reward |
-| 20250505-111503 | Qwen2.5-Math-1.5B-Instruct | [again]grpo + overlong-filter + remove-std_reward + add-entropy_obj |
+| 20250505-111503 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + remove-std_reward + add-entropy_obj[again] |
+| 20250505-223842 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + remove-std_reward + dynamic_gen_length |
+| 20250505-224131 | Qwen2.5-Math-1.5B-Instruct | grpo + overlong-filter + remove-std_reward + add-entropy_obj + dynamic_gen_length |
 
 ### Modified Files
 
