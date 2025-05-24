@@ -6,11 +6,11 @@ from qwen2_model import Transformer
 
 # --- Configuration ---
 # Directory containing the checkpoint files saved by train.py
-checkpoint_dir = Path("/data2/linkdom/checkpoints/rgrpo-qwen2.5-math-1.5b-instruct")
+checkpoint_dir = Path("/data2/linkdom/checkpoints/srgrpo-qwen2.5-math-1.5b-instruct")
 # Path to the original Hugging Face model directory (used for config.json, tokenizer.json etc.)
 original_model_path = Path("/data1/linkdom/.cache/huggingface/hub/models--Qwen--Qwen2.5-Math-1.5B-Instruct/snapshots/aafeb0fc6f22cbf0eaeed126eff8be45b0360a35") # Example path, adjust as needed
 # Base directory where the safetensors models should be saved
-base_output_dir = Path("/data2/linkdom/converted_model_safetensors/rgrpo-qwen2.5-math-1.5b-instruct")
+base_output_dir = Path("/data2/linkdom/converted_model_safetensors/srgrpo-qwen2.5-math-1.5b-instruct")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # Or specify your device
 # --- ---
 
@@ -53,8 +53,22 @@ for checkpoint_path in checkpoint_files:
     output_safetensor_file = output_dir / "model.safetensors"
     print(f"Saving model to safetensors format: {output_safetensor_file}")
     # The state_dict is already on the correct device
+    
+    current_state_dict = model.state_dict()
+
+    # Your qwen2_model.Transformer's parameters correspond to those within 
+    # the 'model' attribute of vLLM's Qwen2ForCausalLM.
+    # Prefix all keys with "model."
+    # if key is 'lm_head.weight' don't prefix it
+    prefixed_state_dict = {}
+    for key, value in current_state_dict.items():
+        if key == "lm_head.weight":
+            prefixed_state_dict[key] = value
+        else:
+            prefixed_state_dict["model." + key] = value
+    
     try:
-        save_file(model.state_dict(), output_safetensor_file)
+        save_file(prefixed_state_dict, output_safetensor_file)
     except Exception as e:
         print(f"Error saving safetensors for {checkpoint_path}: {e}")
         continue # Skip to the next file if saving fails
